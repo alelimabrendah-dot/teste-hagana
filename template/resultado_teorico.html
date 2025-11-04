@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Resultado Teórico - Haganá{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 30px;">
+    <h2 style="color: #2c3e50;">📊 Resultado do Teste Teórico</h2>
+    <p style="color: #7f8c8d;">Candidato: <strong>{{ candidato.nome }}</strong></p>
+</div>
+
+<div class="info-card" style="text-align: center;">
+    <h3 style="color: #2c3e50; margin-bottom: 20px;">Desempenho</h3>
+    
+    <div style="font-size: 48px; margin: 20px 0; color: {% if resultado.percentual >= 70 %}#27ae60{% else %}#e74c3c{% endif %};">
+        {{ "%.1f"|format(resultado.percentual) }}%
+    </div>
+    
+    <div style="margin: 20px 0;">
+        <p style="font-size: 18px; color: #7f8c8d;">
+            Acertos: <strong>{{ resultado.acertos }}/{{ resultado.total }}</strong>
+        </p>
+        <p style="font-size: 18px; color: #7f8c8d;">
+            Status: 
+            <strong style="color: {% if resultado.resultado == 'APROVADO' %}#27ae60{% else %}#e74c3c{% endif %};">
+                {{ resultado.resultado }}
+            </strong>
+        </p>
+    </div>
+    
+    <div class="progress-bar">
+        <div class="progress" style="width: {{ resultado.percentual }}%;"></div>
+    </div>
+    
+    <p style="color: #7f8c8d; margin-top: 10px;">
+        Mínimo para aprovação: 70%
+    </p>
+</div>
+
+{% if resultado.resultado == 'APROVADO' %}
+<div class="alert alert-success">
+    <h4>🎉 Parabéns!</h4>
+    <p>Você foi aprovado no teste teórico. Prepare-se para a próxima etapa.</p>
+</div>
+{% else %}
+<div class="alert alert-danger">
+    <h4>📝 Atenção</h4>
+    <p>Você não atingiu a pontuação mínima necessária.</p>
+</div>
+{% endif %}
+
+<div style="margin-top: 30px; text-align: center;">
+    <a href="{{ url_for('teste_digitacao') }}" class="btn {% if resultado.resultado == 'APROVADO' %}btn-success{% else %}btn-warning{% endif %}">
+        {% if resultado.resultado == 'APROVADO' %}
+        ✍️ Continuar para Teste de Digitação
+        {% else %}
+        ✍️ Fazer Teste de Digitação (Opcional)
+        {% endif %}
+    </a>
+    
+    <div style="margin-top: 15px;">
+        <small style="color: #7f8c8d;">
+            Código do candidato: <strong>{{ candidato.codigo }}</strong>
+        </small>
+    </div>
+</div>
+{% endblock %}
